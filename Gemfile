@@ -3,6 +3,7 @@ ruby '2.0.0'
 
 gem 'rails', '4.0.0.beta1'
 gem 'bootstrap-sass', '2.3.0.1'
+gem 'bcrypt-ruby', '3.0.1' 
 
 group :development, :test do
   gem 'sqlite3', '1.3.7'
@@ -18,6 +19,7 @@ group :test do
 
   gem 'rb-fsevent', :require => false
   gem 'growl', '1.0.3'
+  gem 'factory_girl_rails', '4.2.0'
 end
 
 group :assets do

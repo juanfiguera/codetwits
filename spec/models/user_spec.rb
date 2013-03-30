@@ -2,12 +2,15 @@ require 'spec_helper'
 
 describe User do
 
-	before { @user = User.new(name: "Example User", email: "user@example.com") }
+	before { @user = User.new(name: "Example User", email: "user@example.com", password: "foobar", password_confirmation: "foobar") }
   
 	subject { @user }
 
 	it { should respond_to(:name) }
 	it { should respond_to(:email) }
+	it { should respond_to(:password_digest) }
+	it { should respond_to(:password) }
+	it { should respond_to(:password_confirmation) }
 
 	it { should be_valid }
 
@@ -55,5 +58,35 @@ describe User do
 		end
 
 		it { should_not be_valid }
+	end
+
+	describe "with a password that's too short" do
+		before { @user.password = @user.password_confirmation = "a" * 5 }
+		it { should be_invalid }
+	end
+
+	describe "when password is not present" do
+		before { @user.password = @user.password_confirmation = " "}
+		it { should_not be_valid}
+	end
+
+	describe "when password doesn't match confirmation" do
+		before { @user.password_confirmation = "mismatch" }
+		it { should_not be_valid }			
+	end	
+
+	describe "when password confirmation is nil" do
+		before { @user.password_confirmation = nil }
+		it { should_not be_valid }
+	end
+
+	describe "email address with mixed case" do
+		let(:mixed_case_email) { "Foo@ExAMPLE.CoM" }
+
+		it "should be saved as all lower-case" do
+			@user.email = mixed_case_email
+			@user.save
+			expect(@user.reload.email).to eql(mixed_case_email.downcase)
+		end
 	end
 end
